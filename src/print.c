@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:57:35 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 12:00:25 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	no_such(char *str)
 void	print_unfound(int argc, char **argv, t_flags flags)
 {
 	struct stat	*buf;
-	DIR		*d;
-	int		i;
+	DIR			*d;
+	int			i;
 
 	i = flags.flags_present;
 	sort_args_alphabetical(argc - (i + 1), &argv[i + 1]);

@@ -6,9 +6,28 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:18:28 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:49:04 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 12:05:14 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+** LIBS
+
+	# include <sys/stat.h>	// lstat (file info)
+	# include <dirent.h> 	// DIR
+	# include <time.h>		// ctime() (time to string)
+	# include <pwd.h>		// getpwuid (uid to string)
+	# include <grp.h>		// getgrgid (uid to string)
+	# include <limits.h>	// PATH_MAX
+
+** FLAGS
+
+	int		a;	// all files
+	int		t;	// time sort
+	int		r;	// reverse sort
+	int		R;	// recursive
+	int		l;	// long format
+*/
 
 #ifndef FT_LS_H
 # define FT_LS_H
@@ -16,28 +35,23 @@
 # include <stdio.h>
 # include "../libftprintf/printf.h"
 # include "../libftprintf/libft/includes/libft.h"
-
-// # include <sys/ioctl.h>
-// # include <sys/xattr.h>
-// # include <sys/types.h>
-
-# include <sys/stat.h>	// lstat (file info)
-# include <dirent.h> 	// DIR
-# include <time.h>		// ctime() (time to string)
-# include <pwd.h>		// getpwuid (uid to string)
-# include <grp.h>		// getgrgid (uid to string)
-# include <limits.h>	// PATH_MAX
+# include <sys/stat.h>
+# include <dirent.h>
+# include <time.h>
+# include <pwd.h>
+# include <grp.h>
+# include <limits.h>
 
 typedef struct dirent	t_dirent;
 
 typedef struct s_flags
 {
 	int		flags_present;
-	int		a;	// all files
-	int		t;	// time sort
-	int		r;	// reverse sort
-	int		R;	// recursive
-	int		l;	// long format
+	int		a;
+	int		t;
+	int		r;
+	int		R;
+	int		l;
 }	t_flags;
 
 /*
@@ -51,7 +65,6 @@ void	sort_files_time(char *path, t_dirent **files, int reverse);
 **	LS
 */
 void	ls_dir(char *path, t_flags flags, int depth);
-
 
 /*
 **	NAMES

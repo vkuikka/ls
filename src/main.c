@@ -6,42 +6,48 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:45:30 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 12:03:09 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
+static void	flags_if(char *str, t_flags *flags)
+{
+	int		j;
+
+	j = 0;
+	while (str[j])
+	{
+		if (str[j] == 'l')
+			flags->l = 1;
+		else if (str[j] == 'R')
+			flags->R = 1;
+		else if (str[j] == 'a')
+			flags->a = 1;
+		else if (str[j] == 'r')
+			flags->r = 1;
+		else if (str[j] == 't')
+			flags->t = 1;
+		j++;
+	}
+}
+
 //	reads and saves present flags
 static int	check_flags(int argc, char **argv, t_flags *flags)
 {
 	int		i;
-	int		j;
 	int		res;
 
 	res = 1;
 	i = 1;
 	while (i < argc)
 	{
-		j = 0;
 		if (argv[i][0] != '-')
 			return (i < argc);
 		else
 			flags->flags_present++;
-		while (argv[i][j])
-		{
-			if (argv[i][j] == 'l')
-				flags->l = 1;
-			else if (argv[i][j] == 'R')
-				flags->R = 1;
-			else if (argv[i][j] == 'a')
-				flags->a = 1;
-			else if (argv[i][j] == 'r')
-				flags->r = 1;
-			else if (argv[i][j] == 't')
-				flags->t = 1;
-			j++;
-		}
+		flags_if(argv[i], flags);
 		i++;
 	}
 	return (0);
@@ -84,5 +90,5 @@ int	main(int argc, char **argv)
 	check_flags(argc, argv, &flags);
 	ls_all(argc, argv, flags);
 	ft_putstr("\n");
-	return(0);
+	return (0);
 }
