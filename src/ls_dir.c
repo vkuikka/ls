@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 14:53:22 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:43:14 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ static void	handle_flags(t_flags flags, t_dirent **dirs, char *path, int depth)
 		{
 			long_format(path, dirs[i]->d_name);
 			if (dirs[i + 1])
-				ft_printf("\n");
+				ft_putstr("\n");
 		}
 		else
 		{
 			depth_print(dirs[i]->d_name, depth);
-			ft_printf("\t");
+			ft_putstr("\t");
 		}
 	}
 }
@@ -91,9 +91,9 @@ static t_dirent	**init_names(char **path, int depth)
 
 	if (depth != 0)
 	{
-		ft_printf("\n\n");
+		ft_putstr("\n\n");
 		depth_print(*path, depth);
-		ft_printf(":\n");
+		ft_putstr(":\n");
 	}
 	tmp_path = ft_strjoin(*path, "/");
 	if (depth != 0)

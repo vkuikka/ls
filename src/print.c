@@ -6,11 +6,19 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 17:42:02 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:57:35 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void	no_such(char *str)
+{
+	ft_putstr("ft_ls: ");
+	ft_putstr(str);
+	ft_putstr(": No such file or directory\n");
+	str[0] = '\0';
+}
 
 void	print_unfound(int argc, char **argv, t_flags flags)
 {
@@ -18,25 +26,25 @@ void	print_unfound(int argc, char **argv, t_flags flags)
 	DIR		*d;
 	int		i;
 
-	i = 1 + flags.flags_present;
-	sort_args_alphabetical(argc - i, &argv[i]);
+	i = flags.flags_present;
+	sort_args_alphabetical(argc - (i + 1), &argv[i + 1]);
 	buf = (struct stat *)malloc(sizeof(struct stat));
-	while (i < argc)
+	while (++i < argc)
 	{
 		d = opendir(argv[i]);
 		if (!lstat(argv[i], buf) && !S_ISDIR(buf->st_mode))
 		{
-			ft_printf("%s\n", argv[i]);
+			if (flags.l)
+				long_format("./", argv[i]);
+			else
+				ft_putstr(argv[i]);
+			ft_putstr("\n\n");
 			argv[i][0] = '\0';
 		}
 		else if (!d)
-		{
-			ft_printf("ft_ls: %s: No such file or directory\n", argv[i]);
-			argv[i][0] = '\0';
-		}
+			no_such(argv[i]);
 		if (d)
 			closedir(d);
-		i++;
 	}
 	free(buf);
 }
@@ -63,7 +71,9 @@ void	blocks_total(t_dirent **dirs, t_flags flags, char *path)
 		free(full_path);
 		i++;
 	}
-	ft_printf("total %d\n", total);
+	ft_putstr("total ");
+	ft_putnbr(total);
+	ft_putstr("\n");
 	free(buf);
 }
 
@@ -85,7 +95,7 @@ void	long_format(char *path, char *name)
 	ft_printf("%4hu ", buf->st_nlink);
 	ft_printf("%s  %s", user_name(buf->st_uid), group_name(buf->st_gid));
 	ft_printf("%6lld ", buf->st_size);
-	print_time(ctime(&buf->st_mtime));
+	ft_putstr_len(&ctime(&buf->st_mtime)[4], 12);
 	ft_printf(" %s", name);
 	if (S_ISLNK(buf->st_mode))
 	{
@@ -94,12 +104,6 @@ void	long_format(char *path, char *name)
 	}
 	free(buf);
 	free(full_path);
-}
-
-void	print_time(char *str)
-{
-	str[16] = '\0';
-	ft_putstr(&str[4]);
 }
 
 void	depth_print(char *str, int depth)

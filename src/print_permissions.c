@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 19:51:25 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:41:18 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:42:55 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,36 @@
 static void	print_file_type(unsigned short st_mode)
 {
 	if (S_ISLNK(st_mode))
-		ft_printf("l");
+		ft_putstr("l");
 	else if (S_ISDIR(st_mode))
-		ft_printf("d");
+		ft_putstr("d");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 }
 
 static void	print_file_permissions_part3(unsigned short st_mode)
 {
 	if (st_mode & S_IROTH)
-		ft_printf("r");
+		ft_putstr("r");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 	if (st_mode & S_IWOTH)
-		ft_printf("w");
+		ft_putstr("w");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 	if (st_mode & S_ISVTX)
 	{
 		if (st_mode & S_IXOTH)
-			ft_printf("t");
+			ft_putstr("t");
 		else
-			ft_printf("T");
+			ft_putstr("T");
 	}
 	else
 	{
 		if (st_mode & S_IXOTH)
-			ft_printf("x");
+			ft_putstr("x");
 		else
-			ft_printf("-");
+			ft_putstr("-");
 	}
 }
 

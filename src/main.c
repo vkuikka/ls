@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:40:13 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:45:30 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,17 @@ void	ls_all(int argc, char **argv, t_flags flags)
 	i = 1 + flags.flags_present;
 	while (i < argc)
 	{
-		if (argc - flags.flags_present > 2)
-			ft_printf("%s:\n", argv[i]);
-		d = opendir(argv[i]);
-		if (!d)
+		if (argc - flags.flags_present > 2 && argv[i][0])
 		{
-			i++;
-			continue ;
+			ft_putstr(argv[i]);
+			ft_putstr(":\n");
 		}
+		d = opendir(argv[i]);
+		if (!d && ++i)
+			continue ;
 		closedir(d);
 		ls_dir(argv[i], flags, 0);
-		i++;
-		if (i < argc)
+		if (++i < argc)
 			ft_putstr("\n\n");
 	}
 }

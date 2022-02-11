@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:18:28 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 15:05:49 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:49:04 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char	*user_name(int uid);
 **	PRINT
 */
 void	depth_print(char *str, int depth);
-void	print_time(char *str);
 void	print_file_permissions(unsigned short st_mode);
 void	long_format(char *path, char *name);
 void	blocks_total(t_dirent **dirs, t_flags flags, char *path);
