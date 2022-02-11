@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 19:51:25 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/09 19:54:05 vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:41:18 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,26 @@ static void	print_file_permissions_part3(unsigned short st_mode)
 static void	print_file_permissions_part2(unsigned short st_mode)
 {
 	if (st_mode & S_IRGRP)
-		ft_printf("r");
+		ft_putstr("r");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 	if (st_mode & S_IWGRP)
-		ft_printf("w");
+		ft_putstr("w");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 	if (st_mode & S_ISGID)
 	{
 		if (st_mode & S_IXGRP)
-			ft_printf("s");
+			ft_putstr("s");
 		else
-			ft_printf("S");
+			ft_putstr("S");
 	}
 	else
 	{
 		if (st_mode & S_IXGRP)
-			ft_printf("x");
+			ft_putstr("x");
 		else
-			ft_printf("-");
+			ft_putstr("-");
 	}
 	print_file_permissions_part3(st_mode);
 }
@@ -79,26 +79,26 @@ void	print_file_permissions(unsigned short st_mode)
 {
 	print_file_type(st_mode);
 	if (st_mode & S_IRUSR)
-		ft_printf("r");
+		ft_putstr("r");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 	if (st_mode & S_IWUSR)
-		ft_printf("w");
+		ft_putstr("w");
 	else
-		ft_printf("-");
+		ft_putstr("-");
 	if (st_mode & S_ISUID)
 	{
 		if (st_mode & S_IXUSR)
-			ft_printf("s");
+			ft_putstr("s");
 		else
-			ft_printf("S");
+			ft_putstr("S");
 	}
 	else
 	{
 		if (st_mode & S_IXUSR)
-			ft_printf("x");
+			ft_putstr("x");
 		else
-			ft_printf("-");
+			ft_putstr("-");
 	}
 	print_file_permissions_part2(st_mode);
 }

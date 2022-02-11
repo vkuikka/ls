@@ -6,12 +6,40 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 00:52:32 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/10 17:42:02 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-// void	long_format(char *path, char *name)
+
+void	print_unfound(int argc, char **argv, t_flags flags)
+{
+	struct stat	*buf;
+	DIR		*d;
+	int		i;
+
+	i = 1 + flags.flags_present;
+	sort_args_alphabetical(argc - i, &argv[i]);
+	buf = (struct stat *)malloc(sizeof(struct stat));
+	while (i < argc)
+	{
+		d = opendir(argv[i]);
+		if (!lstat(argv[i], buf) && !S_ISDIR(buf->st_mode))
+		{
+			ft_printf("%s\n", argv[i]);
+			argv[i][0] = '\0';
+		}
+		else if (!d)
+		{
+			ft_printf("ft_ls: %s: No such file or directory\n", argv[i]);
+			argv[i][0] = '\0';
+		}
+		if (d)
+			closedir(d);
+		i++;
+	}
+	free(buf);
+}
 
 void	blocks_total(t_dirent **dirs, t_flags flags, char *path)
 {
@@ -20,6 +48,8 @@ void	blocks_total(t_dirent **dirs, t_flags flags, char *path)
 	int			i;
 	int			total;
 
+	if (!flags.l)
+		return ;
 	buf = (struct stat *)malloc(sizeof(struct stat));
 	if (!buf)
 		return ;
@@ -36,9 +66,6 @@ void	blocks_total(t_dirent **dirs, t_flags flags, char *path)
 	ft_printf("total %d\n", total);
 	free(buf);
 }
-// 		blocks_total(dirs, flags);
-// void	ls_dir(char *path, t_flags flags, int depth)
-// static t_dirent	**add_dir(t_dirent **names, t_dirent *new)
 
 void	long_format(char *path, char *name)
 {
@@ -49,12 +76,14 @@ void	long_format(char *path, char *name)
 	full_path = ft_strjoin(path, name);
 	buf = (struct stat *)malloc(sizeof(struct stat));
 	if (!buf)
+	{
+		free(full_path);
 		return ;
+	}
 	lstat(full_path, buf);
 	print_file_permissions(buf->st_mode);
 	ft_printf("%4hu ", buf->st_nlink);
-	ft_printf("%s  ", user_name(buf->st_uid));
-	ft_printf("%s ", group_name(buf->st_gid));
+	ft_printf("%s  %s", user_name(buf->st_uid), group_name(buf->st_gid));
 	ft_printf("%6lld ", buf->st_size);
 	print_time(ctime(&buf->st_mtime));
 	ft_printf(" %s", name);
@@ -65,7 +94,6 @@ void	long_format(char *path, char *name)
 	}
 	free(buf);
 	free(full_path);
-	// __builtin_dump_struct(buf, &printf);
 }
 
 void	print_time(char *str)

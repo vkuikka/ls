@@ -6,11 +6,39 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 17:52:33 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 00:53:23 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/10 17:42:36 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void	ft_swap_string(char **a, char **b)
+{
+	char	*tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void	sort_args_alphabetical(int argc, char **argv)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < argc)
+	{
+		j = 0;
+		while (j < argc)
+		{
+			if (ft_strcmp(argv[i], argv[j]) < 0)
+				ft_swap_string(&argv[i], &argv[j]);
+			j++;
+		}
+		i++;
+	}
+}
 
 void	sort_files_alphabetical(t_dirent **files, int reverse)
 {
@@ -33,37 +61,43 @@ void	sort_files_alphabetical(t_dirent **files, int reverse)
 	}
 }
 
+static void	set_buffers(struct stat *buf[2], t_dirent **files,
+						int i[2], char *path)
+{
+	char		*full_path;
+
+	full_path = ft_strjoin(path, files[i[0]]->d_name);
+	lstat(full_path, buf[0]);
+	free(full_path);
+	full_path = ft_strjoin(path, files[i[1]]->d_name);
+	lstat(full_path, buf[1]);
+	free(full_path);
+}
+
 void	sort_files_time(char *path, t_dirent **files, int reverse)
 {
-	struct stat	*buf;
-	struct stat	*buf2;
-	char		*full_path;
-	int			i;
-	int			j;
+	struct stat	*buf[2];
+	int			i[2];
 
-	buf = (struct stat *)malloc(sizeof(struct stat));
-	buf2 = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf || !buf2)
+	buf[0] = (struct stat *)malloc(sizeof(struct stat));
+	buf[1] = (struct stat *)malloc(sizeof(struct stat));
+	if (!buf[0] || !buf[1])
 		return ;
-	i = 0;
-	while (files[i])
+	i[0] = 0;
+	while (files[i[0]])
 	{
-		j = 0;
-		while (files[j])
+		i[1] = 0;
+		while (files[i[1]])
 		{
-			full_path = ft_strjoin(path, files[i]->d_name);
-			lstat(full_path, buf);
-			full_path = ft_strjoin(path, files[j]->d_name);
-			lstat(full_path, buf2);
-			if (reverse && buf->st_mtime < buf2->st_mtime)
-				ft_swap((int *)&files[i], (int *)&files[j]);
-			if (!reverse && buf->st_mtime > buf2->st_mtime)
-				ft_swap((int *)&files[i], (int *)&files[j]);
-			free(full_path);
-			j++;
+			set_buffers(buf, files, i, path);
+			if (reverse && buf[0]->st_mtime < buf[1]->st_mtime)
+				ft_swap((int *)&files[i[0]], (int *)&files[i[1]]);
+			if (!reverse && buf[0]->st_mtime > buf[1]->st_mtime)
+				ft_swap((int *)&files[i[0]], (int *)&files[i[1]]);
+			i[1]++;
 		}
-		i++;
+		i[0]++;
 	}
-	free(buf);
-	free(buf2);
+	free(buf[0]);
+	free(buf[1]);
 }

@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 01:09:13 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/11 11:40:13 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,53 +24,66 @@ static int	check_flags(int argc, char **argv, t_flags *flags)
 	while (i < argc)
 	{
 		j = 0;
-		if (argv[i][0] == '-')
-		{
-			while (argv[i][j])
-			{
-				if (argv[i][j] == 'l')
-					flags->l = 1;
-				else if (argv[i][j] == 'R')
-					flags->R = 1;
-				else if (argv[i][j] == 'a')
-					flags->a = 1;
-				else if (argv[i][j] == 'r')
-					flags->r = 1;
-				else if (argv[i][j] == 't')
-					flags->t = 1;
-				j++;
-			}
-		}
+		if (argv[i][0] != '-')
+			return (i < argc);
 		else
-			res = 0;
+			flags->flags_present++;
+		while (argv[i][j])
+		{
+			if (argv[i][j] == 'l')
+				flags->l = 1;
+			else if (argv[i][j] == 'R')
+				flags->R = 1;
+			else if (argv[i][j] == 'a')
+				flags->a = 1;
+			else if (argv[i][j] == 'r')
+				flags->r = 1;
+			else if (argv[i][j] == 't')
+				flags->t = 1;
+			j++;
+		}
 		i++;
 	}
-	return (res);
+	return (0);
 }
 
 void	ls_all(int argc, char **argv, t_flags flags)
 {
 	int		i;
-	int		j;
+	DIR		*d;
 
-	i = 1;
+	if (argc <= 1 + flags.flags_present)
+	{
+		ls_dir(".", flags, 0);
+		return ;
+	}
+	print_unfound(argc, argv, flags);
+	i = 1 + flags.flags_present;
 	while (i < argc)
 	{
+		if (argc - flags.flags_present > 2)
+			ft_printf("%s:\n", argv[i]);
+		d = opendir(argv[i]);
+		if (!d)
+		{
+			i++;
+			continue ;
+		}
+		closedir(d);
 		ls_dir(argv[i], flags, 0);
 		i++;
+		if (i < argc)
+			ft_putstr("\n\n");
 	}
 }
 
 int	main(int argc, char **argv)
 {
 	t_flags	flags;
-	int		has_nonflag;
 
 	ft_bzero(&flags, sizeof(t_flags));
-	if (check_flags(argc, argv, &flags))
-		ls_dir(".", flags, 0);
-	else
-		ls_all(argc, argv, flags);
+	check_flags(argc, argv, &flags);
+	ls_all(argc, argv, flags);
 	ft_putstr("\n");
 	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:18:28 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 00:51:27 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/10 15:05:49 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct dirent	t_dirent;
 
 typedef struct s_flags
 {
+	int		flags_present;
 	int		a;	// all files
 	int		t;	// time sort
 	int		r;	// reverse sort
@@ -42,6 +43,7 @@ typedef struct s_flags
 /*
 **	SORT
 */
+void	sort_args_alphabetical(int argc, char **argv);
 void	sort_files_alphabetical(t_dirent **files, int reverse);
 void	sort_files_time(char *path, t_dirent **files, int reverse);
 
@@ -65,5 +67,6 @@ void	print_time(char *str);
 void	print_file_permissions(unsigned short st_mode);
 void	long_format(char *path, char *name);
 void	blocks_total(t_dirent **dirs, t_flags flags, char *path);
+void	print_unfound(int argc, char **argv, t_flags flags);
 
 #endif
