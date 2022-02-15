@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:42:12 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 22:58:31 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 23:17:19 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_stats	**init_names(char **path, int depth)
 	{
 		ft_putstr("\n\n");
 		depth_print(*path, depth);
-		ft_putstr(":\n");
+		ft_putstr(":");
 	}
 	tmp_path = ft_strjoin(*path, "/");
 	if (depth > 0)

@@ -55,7 +55,7 @@ int	print_unfound(int argc, char **argv, t_flags flags)
 		if (!d && lstat(argv[i], buf))
 		{
 			if (!first)
-				printf("\n");
+				ft_putstr("\n");
 			first = 0;
 			no_such(argv[i]);
 		}
@@ -71,7 +71,7 @@ int	print_unfound(int argc, char **argv, t_flags flags)
 		if (!lstat(argv[i], buf) && !S_ISDIR(buf->st_mode))
 		{
 			if (!first)
-				printf("\n");
+				ft_putstr("\n");
 			else if (first == -1)
 				ft_putstr("\t");
 			first = -1;

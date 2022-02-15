@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 22:49:25 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 23:30:26 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ static void	handle_flags(t_flags flags, t_stats **dirs, char *path, int depth)
 	sort_files_alphabetical(dirs, flags.r);
 	if (flags.t)
 		sort_files_time(path, dirs, flags.r);
+	i = 0;
+	while (dirs[i])
+		i++;
+	if (depth > 0 && (i > 0 || flags.l))
+		ft_putstr("\n");
 	blocks_total(dirs, flags, path);
 	i = -1;
 	while (dirs[++i])

@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 23:10:03 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 23:30:26 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	ls_all(int argc, char **argv, t_flags flags)
 		if (argc - flags.flags_present > 2 && argv[i][0])
 		{
 			if (printed)
-				printf("\n");
+				ft_putstr("\n");
 			printed = 1;
 			ft_putstr(argv[i]);
 			ft_putstr(":\n");
