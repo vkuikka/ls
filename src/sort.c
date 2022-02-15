@@ -6,13 +6,22 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 17:52:33 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/10 17:42:36 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 14:05:46 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	ft_swap_string(char **a, char **b)
+void	swap_stats(t_stats **a, t_stats **b)
+{
+	t_stats	*tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void	swap_string(char **a, char **b)
 {
 	char	*tmp;
 
@@ -33,14 +42,14 @@ void	sort_args_alphabetical(int argc, char **argv)
 		while (j < argc)
 		{
 			if (ft_strcmp(argv[i], argv[j]) < 0)
-				ft_swap_string(&argv[i], &argv[j]);
+				swap_string(&argv[i], &argv[j]);
 			j++;
 		}
 		i++;
 	}
 }
 
-void	sort_files_alphabetical(t_dirent **files, int reverse)
+void	sort_files_alphabetical(t_stats **files, int reverse)
 {
 	int		i;
 	int		j;
@@ -51,17 +60,22 @@ void	sort_files_alphabetical(t_dirent **files, int reverse)
 		j = 0;
 		while (files[j])
 		{
-			if (reverse && ft_strcmp(files[i]->d_name, files[j]->d_name) > 0)
-				ft_swap((int *)&files[i], (int *)&files[j]);
-			if (!reverse && ft_strcmp(files[i]->d_name, files[j]->d_name) < 0)
-				ft_swap((int *)&files[i], (int *)&files[j]);
+			if (i != j)
+			{
+				if (!reverse
+					&& ft_strcmp(files[i]->d_name, files[j]->d_name) < 0)
+					swap_stats(&files[i], &files[j]);
+				if (reverse
+					&& ft_strcmp(files[i]->d_name, files[j]->d_name) > 0)
+					swap_stats(&files[i], &files[j]);
+			}
 			j++;
 		}
 		i++;
 	}
 }
 
-static void	set_buffers(struct stat *buf[2], t_dirent **files,
+static void	set_buffers(struct stat *buf[2], t_stats **files,
 						int i[2], char *path)
 {
 	char		*full_path;
@@ -74,29 +88,42 @@ static void	set_buffers(struct stat *buf[2], t_dirent **files,
 	free(full_path);
 }
 
-void	sort_files_time(char *path, t_dirent **files, int reverse)
+static void	set_times(struct stat *buf[2], int t[2])
+{
+	t[0] = buf[0]->st_mtimespec.tv_sec;
+	t[1] = buf[1]->st_mtimespec.tv_sec;
+	if (t[0] == t[1])
+	{
+		t[0] = buf[0]->st_mtimespec.tv_nsec;
+		t[1] = buf[1]->st_mtimespec.tv_nsec;
+	}
+}
+
+void	sort_files_time(char *path, t_stats **files, int reverse)
 {
 	struct stat	*buf[2];
+	int			mod_time[2];
 	int			i[2];
 
 	buf[0] = (struct stat *)malloc(sizeof(struct stat));
 	buf[1] = (struct stat *)malloc(sizeof(struct stat));
 	if (!buf[0] || !buf[1])
 		return ;
-	i[0] = 0;
-	while (files[i[0]])
+	i[0] = -1;
+	while (files[++i[0]])
 	{
-		i[1] = 0;
-		while (files[i[1]])
-		{
-			set_buffers(buf, files, i, path);
-			if (reverse && buf[0]->st_mtime < buf[1]->st_mtime)
-				ft_swap((int *)&files[i[0]], (int *)&files[i[1]]);
-			if (!reverse && buf[0]->st_mtime > buf[1]->st_mtime)
-				ft_swap((int *)&files[i[0]], (int *)&files[i[1]]);
-			i[1]++;
+		i[1] = -1;
+		while (files[++i[1]])
+		{ if (i[0] != i[1])
+			{
+				set_buffers(buf, files, i, path);
+				set_times(buf, mod_time);
+				if (reverse && mod_time[0] < mod_time[1])
+					swap_stats(&files[i[0]], &files[i[1]]);
+				if (!reverse && mod_time[0] > mod_time[1])
+					swap_stats(&files[i[0]], &files[i[1]]);
+			}
 		}
-		i[0]++;
 	}
 	free(buf[0]);
 	free(buf[1]);

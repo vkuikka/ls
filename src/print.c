@@ -6,75 +6,36 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 12:00:25 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/14 22:42:51 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	no_such(char *str)
+static void	ft_putnbr_base(unsigned long long n, int base, int lowercase)
 {
-	ft_putstr("ft_ls: ");
-	ft_putstr(str);
-	ft_putstr(": No such file or directory\n");
-	str[0] = '\0';
+	char	*b;
+
+	if (lowercase)
+		b = "0123456789abcdef";
+	else
+		b = "0123456789ABCDEF";
+	if (n > (unsigned long long)base - 1)
+	{
+		if (n / base)
+			ft_putnbr_base(n / base, base, lowercase);
+		ft_putchar(b[n % base]);
+	}
+	else
+		ft_putchar(b[n]);
 }
 
-void	print_unfound(int argc, char **argv, t_flags flags)
+static void	ft_putstr_len(char *str, size_t len)
 {
-	struct stat	*buf;
-	DIR			*d;
-	int			i;
-
-	i = flags.flags_present;
-	sort_args_alphabetical(argc - (i + 1), &argv[i + 1]);
-	buf = (struct stat *)malloc(sizeof(struct stat));
-	while (++i < argc)
-	{
-		d = opendir(argv[i]);
-		if (!lstat(argv[i], buf) && !S_ISDIR(buf->st_mode))
-		{
-			if (flags.l)
-				long_format("./", argv[i]);
-			else
-				ft_putstr(argv[i]);
-			ft_putstr("\n\n");
-			argv[i][0] = '\0';
-		}
-		else if (!d)
-			no_such(argv[i]);
-		if (d)
-			closedir(d);
-	}
-	free(buf);
-}
-
-void	blocks_total(t_dirent **dirs, t_flags flags, char *path)
-{
-	struct stat	*buf;
-	char		*full_path;
-	int			i;
-	int			total;
-
-	if (!flags.l)
-		return ;
-	buf = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf)
-		return ;
-	i = 0;
-	total = 0;
-	while (dirs[i])
-	{
-		full_path = ft_strjoin(path, dirs[i]->d_name);
-		lstat(full_path, buf);
-		total += buf->st_blocks;
-		free(full_path);
-		i++;
-	}
-	ft_putstr("total ");
-	ft_putnbr(total);
-	ft_putstr("\n");
-	free(buf);
+	if (ft_strlen(str) > len)
+		write(1, str, len);
+	else
+		write(1, str, ft_strlen(str));
 }
 
 void	long_format(char *path, char *name)
@@ -92,15 +53,30 @@ void	long_format(char *path, char *name)
 	}
 	lstat(full_path, buf);
 	print_file_permissions(buf->st_mode);
-	ft_printf("%4hu ", buf->st_nlink);
-	ft_printf("%s  %s", user_name(buf->st_uid), group_name(buf->st_gid));
-	ft_printf("%6lld ", buf->st_size);
+	ft_putstr(" ");
+	ft_putnbr(buf->st_nlink);
+	ft_putstr(" ");
+	ft_putstr(user_name(buf->st_uid));
+	ft_putstr("  ");
+	ft_putstr(group_name(buf->st_gid));
+	ft_putstr("  ");
+	if (S_ISCHR(buf->st_mode) || S_ISBLK(buf->st_mode))
+	{
+		if (buf->st_rdev != 0)
+			ft_putstr("0x");
+		ft_putnbr_base(buf->st_rdev, 16, 1);
+	}
+	else
+		ft_putnbr(buf->st_size);
+	ft_putstr("\t");
 	ft_putstr_len(&ctime(&buf->st_mtime)[4], 12);
-	ft_printf(" %s", name);
+	ft_putstr(" ");
+	ft_putstr(name);
 	if (S_ISLNK(buf->st_mode))
 	{
 		readlink(full_path, buff, PATH_MAX);
-		ft_printf(" -> %s", buff);
+		ft_putstr(" -> ");
+		ft_putstr(buff);
 	}
 	free(buf);
 	free(full_path);

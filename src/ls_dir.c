@@ -6,45 +6,46 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:43:14 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 13:45:51by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	recursion(t_flags flags, t_dirent **dirs, char *path, int depth)
+static void	recursion(t_flags flags, t_stats **dirs, char *path, int depth)
 {
-	char	*tmp_path;
-	int		i;
+	char		*tmp_path;
+	int			i;
+	struct stat	*buf;
 
-	i = 0;
 	if (flags.R)
 	{
+		buf = (struct stat *)malloc(sizeof(struct stat));
+		i = 0;
 		while (dirs[i])
 		{
-			if (dirs[i]->d_type == DT_DIR)
+			tmp_path = ft_strjoin(path, dirs[i]->d_name);
+			lstat(tmp_path, buf);
+			free(tmp_path);
+			if ((dirs[i]->d_type == DT_DIR || S_ISDIR(buf->st_mode)) && !dirs[i]->no_recursion)
 			{
 				tmp_path = ft_strjoin(path, dirs[i]->d_name);
 				ls_dir(tmp_path, flags, depth + 1);
 			}
 			i++;
 		}
+		free(buf);
 	}
 	free(path);
-	free(dirs);
 }
 
-static void	handle_flags(t_flags flags, t_dirent **dirs, char *path, int depth)
+static void	handle_flags(t_flags flags, t_stats **dirs, char *path, int depth)
 {
 	int	i;
 
+	sort_files_alphabetical(dirs, flags.r);
 	if (flags.t)
-	{
-		sort_files_alphabetical(dirs, 0);
 		sort_files_time(path, dirs, flags.r);
-	}
-	else
-		sort_files_alphabetical(dirs, flags.r);
 	blocks_total(dirs, flags, path);
 	i = -1;
 	while (dirs[++i])
@@ -63,30 +64,48 @@ static void	handle_flags(t_flags flags, t_dirent **dirs, char *path, int depth)
 	}
 }
 
-static t_dirent	**add_dir(t_dirent **names, t_dirent *new)
+static void	free_dirs(t_stats **names)
 {
-	t_dirent	**new_names;
+	int	i;
+
+	i = -1;
+	while (names[++i])
+	{
+		free(names[i]->d_name);
+		free(names[i]);
+	}
+	free(names);
+}
+
+static t_stats	**add_dir(t_stats **names, char *n_name, char n_type, char n_r)
+{
+	t_stats		**new_names;
 	int			i;
 
 	i = 0;
 	while (names[i])
 		i++;
-	new_names = (t_dirent **)malloc(sizeof(t_dirent *) * (i + 2));
-	i = 0;
-	while (names[i])
+	new_names = (t_stats **)malloc(sizeof(t_stats *) * (i + 2));
+	i = -1;
+	while (names[++i])
 	{
-		new_names[i] = names[i];
-		i++;
+		new_names[i] = (t_stats *)malloc(sizeof(t_stats));
+		new_names[i]->d_name = ft_strdup(names[i]->d_name);
+		new_names[i]->d_type = names[i]->d_type;
+		new_names[i]->no_recursion = names[i]->no_recursion;
 	}
-	new_names[i] = new;
+	new_names[i] = (t_stats *)malloc(sizeof(t_stats));
+	new_names[i]->d_name = ft_strdup(n_name);
+	new_names[i]->d_type = n_type;
+	new_names[i]->no_recursion = n_r;
 	new_names[i + 1] = NULL;
-	free(names);
+	free_dirs(names);
 	return (new_names);
 }
 
-static t_dirent	**init_names(char **path, int depth)
+static t_stats	**init_names(char **path, int depth)
 {
-	t_dirent	**names;
+	t_stats		**names;
 	char		*tmp_path;
 
 	if (depth != 0)
@@ -99,7 +118,7 @@ static t_dirent	**init_names(char **path, int depth)
 	if (depth != 0)
 		free(*path);
 	*path = tmp_path;
-	names = (t_dirent **)malloc(sizeof(t_dirent *) * 1);
+	names = (t_stats **)malloc(sizeof(t_stats *) * 1);
 	names[0] = NULL;
 	return (names);
 }
@@ -108,11 +127,14 @@ void	ls_dir(char *path, t_flags flags, int depth)
 {
 	DIR			*d;
 	t_dirent	*tmp;
-	t_dirent	**dirs;
+	t_stats		**dirs;
 
 	d = opendir(path);
 	if (!d)
+	{
+		print_filename_error(path);
 		return ;
+	}
 	dirs = init_names(&path, depth);
 	tmp = readdir(d);
 	while (tmp != NULL)
@@ -124,11 +146,14 @@ void	ls_dir(char *path, t_flags flags, int depth)
 		}
 		if (ft_strcmp(tmp->d_name, ".") == 0
 			|| ft_strcmp(tmp->d_name, "..") == 0)
-			tmp->d_type = DT_REG;
-		dirs = add_dir(dirs, tmp);
+			dirs = add_dir(dirs, tmp->d_name, DT_REG, 1);
+		else
+			dirs = add_dir(dirs, tmp->d_name, tmp->d_type, 0);
 		tmp = readdir(d);
 	}
 	handle_flags(flags, dirs, path, depth);
 	recursion(flags, dirs, path, depth);
 	closedir(d);
+	free(tmp);
+	free_dirs(dirs);
 }

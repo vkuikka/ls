@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 19:51:25 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/11 11:42:55 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/13 23:02:39 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,20 @@
 
 static void	print_file_type(unsigned short st_mode)
 {
-	if (S_ISLNK(st_mode))
-		ft_putstr("l");
+	if (S_ISREG(st_mode))
+		ft_putstr("-");
 	else if (S_ISDIR(st_mode))
 		ft_putstr("d");
+	else if (S_ISCHR(st_mode))
+		ft_putstr("c");
+	else if (S_ISBLK(st_mode))
+		ft_putstr("b");
+	else if (S_ISFIFO(st_mode))
+		ft_putstr("p");
+	else if (S_ISLNK(st_mode))
+		ft_putstr("l");
+	else if (S_ISSOCK(st_mode))
+		ft_putstr("s");
 	else
 		ft_putstr("-");
 }
