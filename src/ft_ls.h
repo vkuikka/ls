@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:18:28 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/14 00:25:38y vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 20:43:14 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_stats
 	char	no_recursion;
 }	t_stats;
 
-
 /*
 **	SORT
 */
@@ -74,6 +73,16 @@ void	sort_args_alphabetical(int argc, char **argv, int reverse);
 void	sort_args_time(int argc, char **argv, int reverse);
 void	sort_files_alphabetical(t_stats **files, int reverse);
 void	sort_files_time(char *path, t_stats **files, int reverse);
+
+/*
+** UTILS
+*/
+void	swap_string(char **a, char **b);
+void	push_string(char **str, int i, int j);
+void	swap_stats(t_stats *a, t_stats *b);
+void	push_stats(t_stats **files, int i, int j);
+void	free_dirs(t_stats **names);
+t_stats	**init_names(char **path, int depth);
 
 /*
 **	LS

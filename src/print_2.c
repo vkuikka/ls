@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 23:43:51 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 16:38:45 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 20:54:00 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ static void	no_such(char *str)
 	ft_putstr(str);
 	ft_putstr(": No such file or directory\n");
 	str[0] = '\0';
+}
+
+static void	unfound(char **argv, t_flags flags, int i)
+{
+	if (flags.l)
+		long_format("./", argv[i]);
+	else
+		ft_putstr(argv[i]);
+	ft_putstr("\n\n");
+	argv[i][0] = '\0';
 }
 
 void	print_unfound(int argc, char **argv, t_flags flags)
@@ -35,14 +45,7 @@ void	print_unfound(int argc, char **argv, t_flags flags)
 	{
 		d = opendir(argv[i]);
 		if (!lstat(argv[i], buf) && !S_ISDIR(buf->st_mode))
-		{
-			if (flags.l)
-				long_format("./", argv[i]);
-			else
-				ft_putstr(argv[i]);
-			ft_putstr("\n\n");
-			argv[i][0] = '\0';
-		}
+			unfound(argv, flags, i);
 		else if (!d)
 			no_such(argv[i]);
 		if (d)
