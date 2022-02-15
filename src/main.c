@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 23:30:26 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 01:16:16 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,28 @@ static int	check_flags(int argc, char **argv, t_flags *flags)
 	return (0);
 }
 
+void	print_name(int *printed, char *name)
+{
+	if (*printed)
+		ft_putstr("\n");
+	*printed = 1;
+	ft_putstr(name);
+	ft_putstr(":\n");
+}
+
 void	ls_all(int argc, char **argv, t_flags flags)
 {
 	int		i;
 	DIR		*d;
 	int		printed;
+	int		first;
 
 	if (argc <= 1 + flags.flags_present)
-	{
 		ls_dir(".", flags, 0);
-		return ;
-	}
-	printed = print_unfound(argc, argv, flags);
+	else
+		printed = print_unfound(argc, argv, flags);
 	i = 1 + flags.flags_present;
-	int first = 1;
+	first = 1;
 	while (i < argc)
 	{
 		d = opendir(argv[i]);
@@ -75,13 +83,7 @@ void	ls_all(int argc, char **argv, t_flags flags)
 		if (printed == -1 || first == 0)
 			ft_putstr("\n");
 		if (argc - flags.flags_present > 2 && argv[i][0])
-		{
-			if (printed)
-				ft_putstr("\n");
-			printed = 1;
-			ft_putstr(argv[i]);
-			ft_putstr(":\n");
-		}
+			print_name(&printed, argv[i]);
 		closedir(d);
 		first = 0;
 		ls_dir(argv[i], flags, -1);

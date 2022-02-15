@@ -6,49 +6,45 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 21:24:11 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 21:24:51by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 01:49:32 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	no_such(char *str)
+static int	result_value(int res, struct stat *buf)
 {
-	ft_putstr("ft_ls: ");
-	ft_putstr(str);
-	ft_putstr(": ");
-	ft_putstr(strerror(errno));
-	str[0] = '\0';
+	free(buf);
+	if (res == 0)
+		return (1);
+	else if (res == -1)
+		return (-1);
+	return (0);
 }
 
-static void	unfound(char **argv, t_flags flags, int i)
+static void	unfound(char **argv, t_flags flags, int i, int first)
 {
 	if (flags.l)
-		long_format("./", argv[i]);
+	{
+		if (first > 0)
+			long_format("./", argv[i], 0);
+		else
+			long_format("./", argv[i], 1);
+	}
 	else
 		ft_putstr(argv[i]);
 	argv[i][0] = '\0';
 }
 
-// static void	unfound_files(int argc, char **argv, t_flags flags)
-// {
-// }
-
-int	print_unfound(int argc, char **argv, t_flags flags)
+static int	no_such_files(int argc, char **argv,
+						t_flags flags, struct stat *buf)
 {
-	struct stat	*buf;
-	DIR			*d;
-	int			i;
-	int			first;
+	DIR		*d;
+	int		first;
+	int		i;
 
-	i = flags.flags_present;
-	sort_args_alphabetical(argc - (i + 1), &argv[i + 1], flags.r);
-	if (flags.t)
-		sort_args_time(argc - (i + 1), &argv[i + 1], flags.r);
-	buf = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf)
-		return (0);
 	first = 1;
+	i = flags.flags_present;
 	while (++i < argc)
 	{
 		d = opendir(argv[i]);
@@ -57,33 +53,57 @@ int	print_unfound(int argc, char **argv, t_flags flags)
 			if (!first)
 				ft_putstr("\n");
 			first = 0;
-			no_such(argv[i]);
+			ft_putstr("ft_ls: ");
+			ft_putstr(argv[i]);
+			ft_putstr(": ");
+			ft_putstr(strerror(errno));
+			argv[i][0] = '\0';
 		}
 		if (d)
 			closedir(d);
 	}
+	return (first);
+}
+
+static int	unfound_init(int argc, char **argv,
+						t_flags flags, struct stat **buf)
+{
+	int		f;
+
+	f = flags.flags_present + 1;
+	sort_args_alphabetical(argc - f, &argv[f], flags.r);
+	if (flags.t)
+		sort_args_time(argc - f, &argv[f], flags.r);
+	*buf = (struct stat *)malloc(sizeof(struct stat));
+	if (!*buf)
+		return (0);
+	return (1);
+}
+
+int	print_unfound(int argc, char **argv, t_flags flags)
+{
+	struct stat	*buf;
+	DIR			*d;
+	int			i;
+	int			first;
+
+	if (!unfound_init(argc, argv, flags, &buf))
+		return (0);
+	first = no_such_files(argc, argv, flags, buf);
+	if (flags.l && !first)
+		first = 2;
 	i = flags.flags_present;
-	if (flags.l)
-		first = 1;
 	while (++i < argc)
 	{
 		d = opendir(argv[i]);
 		if (!lstat(argv[i], buf) && !S_ISDIR(buf->st_mode))
 		{
-			if (!first)
-				ft_putstr("\n");
-			else if (first == -1)
-				ft_putstr("\t");
+			unfound_newline_or_tab(first);
+			unfound(argv, flags, i, first);
 			first = -1;
-			unfound(argv, flags, i);
 		}
 		if (d)
 			closedir(d);
 	}
-	free(buf);
-	if (first == 0)
-		return (1);
-	else if (first == -1)
-		return (-1);
-	return (0);
+	return (result_value(first, buf));
 }

@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 23:30:26 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 23:59:02 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	handle_flags(t_flags flags, t_stats **dirs, char *path, int depth)
 	while (dirs[++i])
 	{
 		if (flags.l)
-			long_format(path, dirs[i]->d_name);
+			long_format(path, dirs[i]->d_name, 1);
 		else
 		{
 			depth_print(dirs[i]->d_name, depth);
