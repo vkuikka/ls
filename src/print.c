@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 16:39:55 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 20:29:14 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,31 @@ static void	ft_putstr_len(char *str, size_t len)
 		write(1, str, ft_strlen(str));
 }
 
+void	long_format_part_2(char *name,
+			struct stat *buf, char *buff, char *full_path)
+{
+	if (S_ISCHR(buf->st_mode) || S_ISBLK(buf->st_mode))
+	{
+		if (buf->st_rdev != 0)
+			ft_putstr("0x");
+		ft_putnbr_base(buf->st_rdev, 16, 1);
+	}
+	else
+		ft_putnbr(buf->st_size);
+	ft_putstr("\t");
+	ft_putstr_len(&ctime(&buf->st_mtime)[4], 12);
+	ft_putstr(" ");
+	ft_putstr(name);
+	if (S_ISLNK(buf->st_mode))
+	{
+		readlink(full_path, buff, PATH_MAX);
+		ft_putstr(" -> ");
+		ft_putstr(buff);
+	}
+	free(buf);
+	free(full_path);
+}
+
 void	long_format(char *path, char *name)
 {
 	struct stat	*buf;
@@ -61,26 +86,7 @@ void	long_format(char *path, char *name)
 	ft_putstr("  ");
 	ft_putstr(group_name(buf->st_gid));
 	ft_putstr("  ");
-	if (S_ISCHR(buf->st_mode) || S_ISBLK(buf->st_mode))
-	{
-		if (buf->st_rdev != 0)
-			ft_putstr("0x");
-		ft_putnbr_base(buf->st_rdev, 16, 1);
-	}
-	else
-		ft_putnbr(buf->st_size);
-	ft_putstr("\t");
-	ft_putstr_len(&ctime(&buf->st_mtime)[4], 12);
-	ft_putstr(" ");
-	ft_putstr(name);
-	if (S_ISLNK(buf->st_mode))
-	{
-		readlink(full_path, buff, PATH_MAX);
-		ft_putstr(" -> ");
-		ft_putstr(buff);
-	}
-	free(buf);
-	free(full_path);
+	long_format_part_2(name, buf, buff, full_path);
 }
 
 void	depth_print(char *str, int depth)
