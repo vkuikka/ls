@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/14 22:42:51 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 16:39:55 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	long_format(char *path, char *name)
 		free(full_path);
 		return ;
 	}
+	ft_putstr("\n");
 	lstat(full_path, buf);
 	print_file_permissions(buf->st_mode);
 	ft_putstr(" ");

@@ -61,6 +61,7 @@ typedef struct s_flags
 typedef struct s_stats
 {
 	char	*d_name;
+	char	*path;
 	char	d_type;
 	char	no_recursion;
 }	t_stats;
@@ -69,7 +70,8 @@ typedef struct s_stats
 /*
 **	SORT
 */
-void	sort_args_alphabetical(int argc, char **argv);
+void	sort_args_alphabetical(int argc, char **argv, int reverse);
+void	sort_args_time(int argc, char **argv, int reverse);
 void	sort_files_alphabetical(t_stats **files, int reverse);
 void	sort_files_time(char *path, t_stats **files, int reverse);
 
@@ -93,5 +95,7 @@ void	long_format(char *path, char *name);
 void	blocks_total(t_stats **dirs, t_flags flags, char *path);
 void	print_unfound(int argc, char **argv, t_flags flags);
 void	print_filename_error(char *path);
+
+void	free_dirs(t_stats **names);
 
 #endif

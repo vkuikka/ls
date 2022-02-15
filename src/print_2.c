@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 23:43:51 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/14 23:15:49 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 16:38:45 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ void	print_unfound(int argc, char **argv, t_flags flags)
 	int			i;
 
 	i = flags.flags_present;
-	sort_args_alphabetical(argc - (i + 1), &argv[i + 1]);
+	sort_args_alphabetical(argc - (i + 1), &argv[i + 1], flags.r);
+	if (flags.t)
+		sort_args_time(argc - (i + 1), &argv[i + 1], flags.r);
 	buf = (struct stat *)malloc(sizeof(struct stat));
 	while (++i < argc)
 	{
@@ -73,7 +75,6 @@ void	blocks_total(t_stats **dirs, t_flags flags, char *path)
 	}
 	ft_putstr("total ");
 	ft_putnbr(total);
-	ft_putstr("\n");
 	free(buf);
 }
 

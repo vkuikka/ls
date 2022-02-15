@@ -51,11 +51,7 @@ static void	handle_flags(t_flags flags, t_stats **dirs, char *path, int depth)
 	while (dirs[++i])
 	{
 		if (flags.l)
-		{
 			long_format(path, dirs[i]->d_name);
-			if (dirs[i + 1])
-				ft_putstr("\n");
-		}
 		else
 		{
 			depth_print(dirs[i]->d_name, depth);
@@ -64,7 +60,7 @@ static void	handle_flags(t_flags flags, t_stats **dirs, char *path, int depth)
 	}
 }
 
-static void	free_dirs(t_stats **names)
+void	free_dirs(t_stats **names)
 {
 	int	i;
 
