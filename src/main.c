@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 20:54:24 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 23:10:03 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,28 +57,35 @@ void	ls_all(int argc, char **argv, t_flags flags)
 {
 	int		i;
 	DIR		*d;
+	int		printed;
 
 	if (argc <= 1 + flags.flags_present)
 	{
 		ls_dir(".", flags, 0);
 		return ;
 	}
-	print_unfound(argc, argv, flags);
+	printed = print_unfound(argc, argv, flags);
 	i = 1 + flags.flags_present;
+	int first = 1;
 	while (i < argc)
 	{
-		if (argc - flags.flags_present > 2 && argv[i][0])
-		{
-			ft_putstr(argv[i]);
-			ft_putstr(":\n");
-		}
 		d = opendir(argv[i]);
 		if (!d && ++i)
 			continue ;
+		if (printed == -1 || first == 0)
+			ft_putstr("\n");
+		if (argc - flags.flags_present > 2 && argv[i][0])
+		{
+			if (printed)
+				printf("\n");
+			printed = 1;
+			ft_putstr(argv[i]);
+			ft_putstr(":\n");
+		}
 		closedir(d);
-		ls_dir(argv[i], flags, 0);
-		if (++i < argc)
-			ft_putstr("\n\n");
+		first = 0;
+		ls_dir(argv[i], flags, -1);
+		i++;
 	}
 }
 

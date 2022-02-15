@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 20:53:53 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/15 22:49:25 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static void	recursion(t_flags flags, t_stats **dirs, char *path, int depth)
 				&& !dirs[i]->no_recursion)
 			{
 				tmp_path = ft_strjoin(path, dirs[i]->d_name);
+				if (depth == -1)
+					depth = 0;
 				ls_dir(tmp_path, flags, depth + 1);
 			}
 			i++;
