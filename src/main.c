@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 12:53:49 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:22:30 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	ls_all(int argc, char **argv, t_flags flags)
 	first = 1;
 	while (i < argc)
 	{
-		d = opendir(argv[i]);
+		d = arg_permission(argv[i], printed);
 		if (!d && ++i)
 			continue ;
 		if (printed == -1 || first == 0)

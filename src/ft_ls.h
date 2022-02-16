@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:18:28 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 01:49:15 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:06:18 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ void	print_filename_error(char *path);
 void	unfound_newline_or_tab(int first);
 
 void	free_dirs(t_stats **names);
+DIR		*arg_permission(char *str, int printed);
 
 #endif
