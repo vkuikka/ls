@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 19:24:38 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:29:32 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	ls_all(int argc, char **argv, t_flags flags)
 	first = 1;
 	while (i < argc)
 	{
-		d = arg_permission(argv[i], printed);
+		d = arg_permission(argv[i], printed, argc - flags.flags_present);
 		if (!d && ++i)
 			continue ;
 		if (printed == -1 || first == 0)

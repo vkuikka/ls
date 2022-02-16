@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 01:48:21 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 19:12:16 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:52:04 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,23 @@ void	unfound_newline_or_tab(int first)
 		ft_putstr("\t");
 }
 
-DIR	*arg_permission(char *str, int printed)
+DIR	*arg_permission(char *str, int printed, int argc)
 {
+	static int	first = 1;
 	struct stat	*buf;
 	DIR			*d;
 
 	buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 	if (!lstat(str, buf) && S_ISDIR(buf->st_mode) && !opendir(str))
 	{
-		if (printed)
+		if (printed || !first)
 			ft_putstr("\n\n");
+		first = 0;
+		if (argc > 2)
+		{
+			ft_putstr(str);
+			ft_putstr(":\n");
+		}
 		ft_putstr("ft_ls: ");
 		ft_putstr(str);
 		ft_putstr(": ");
