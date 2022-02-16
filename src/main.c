@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 01:16:16 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 12:53:49 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ static void	flags_if(char *str, t_flags *flags)
 			flags->r = 1;
 		else if (str[j] == 't')
 			flags->t = 1;
+		else if (str[j] != '-')
+		{
+			ft_putstr("ft_ls: invalid option: -- ");
+			ft_putchar(str[j]);
+			ft_putstr("\nusage: ft_ls [-lRart] [file ...]\n");
+			exit(1);
+		}
 		j++;
 	}
 }
@@ -37,16 +44,18 @@ static void	flags_if(char *str, t_flags *flags)
 static int	check_flags(int argc, char **argv, t_flags *flags)
 {
 	int		i;
-	int		res;
 
-	res = 1;
 	i = 1;
 	while (i < argc)
 	{
 		if (argv[i][0] != '-')
-			return (i < argc);
+			return (1);
 		else
+		{
+			if (ft_strlen(argv[i]) < 2)
+				return (1);
 			flags->flags_present++;
+		}
 		flags_if(argv[i], flags);
 		i++;
 	}
