@@ -17,12 +17,9 @@ LIB = libft/libft.a
 HEADERS = -I libft/includes/
 FLAGS = -Wall -Wextra -Werror
 
-all:
+$(NAME):
 	@make -C libft
-	gcc -O3 -o $(NAME) $(FILES) $(LIB) $(HEADERS)
-
-f:
-	gcc -O3 -fsanitize=address -g -o $(NAME) $(FILES) $(LIB) $(HEADERS)
+	gcc -o $(NAME) $(FLAGS) $(FILES) $(LIB) $(HEADERS)
 
 clean:
 	@make clean -C libft
@@ -32,4 +29,4 @@ fclean: clean
 	@make fclean -C libft
 
 re: fclean
-	make all
+	make

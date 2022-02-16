@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 23:59:02 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:30:39 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static t_stats	**add_dir(t_stats **names, char *n_name, char n_type, char n_r)
 	return (new_names);
 }
 
-t_stats	**ls_dir_add(t_dirent *tmp, t_flags flags, DIR *d, t_stats **dirs)
+t_stats	**ls_dir_add(t_dirent *tmp, t_flags flags, t_stats **dirs)
 {
 	if (tmp->d_name[0] == '.' && !flags.a)
 		return (dirs);
@@ -121,7 +121,7 @@ void	ls_dir(char *path, t_flags flags, int depth)
 	tmp = readdir(d);
 	while (tmp != NULL)
 	{
-		dirs = ls_dir_add(tmp, flags, d, dirs);
+		dirs = ls_dir_add(tmp, flags, dirs);
 		tmp = readdir(d);
 	}
 	handle_flags(flags, dirs, path, depth);

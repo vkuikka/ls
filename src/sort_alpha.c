@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:30:17 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 20:31:09 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:30:27 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	sort_args_alphabetical(int argc, char **argv, int reverse)
 {
-	struct stat	*buf[2];
 	int			i;
 	int			j;
 
