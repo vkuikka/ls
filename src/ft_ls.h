@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:18:28 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 19:06:18 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:24:24 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_flags
 	int		a;
 	int		t;
 	int		r;
-	int		R;
+	int		rec;
 	int		l;
 }	t_flags;
 

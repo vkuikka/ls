@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 13:35:40 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:24:47 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	recursion(t_flags flags, t_stats **dirs, char *path, int depth)
 	int			i;
 	struct stat	*buf;
 
-	if (flags.R)
+	if (flags.rec)
 	{
 		buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 		i = 0;

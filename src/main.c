@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 14:16:20 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 19:22:30 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 19:24:38 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	flags_if(char *str, t_flags *flags)
 		if (str[j] == 'l')
 			flags->l = 1;
 		else if (str[j] == 'R')
-			flags->R = 1;
+			flags->rec = 1;
 		else if (str[j] == 'a')
 			flags->a = 1;
 		else if (str[j] == 'r')
