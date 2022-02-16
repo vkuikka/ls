@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:42:12 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 23:17:19 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:35:24 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_stats	**init_names(char **path, int depth)
 	if (depth > 0)
 		free(*path);
 	*path = tmp_path;
-	names = (t_stats **)malloc(sizeof(t_stats *) * 1);
+	names = (t_stats **)ft_memalloc(sizeof(t_stats *) * 1);
 	names[0] = NULL;
 	return (names);
 }

@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/13 23:43:51 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 21:26:28 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:36:03 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ void	blocks_total(t_stats **dirs, t_flags flags, char *path)
 
 	if (!flags.l)
 		return ;
-	buf = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf)
-		return ;
+	buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 	i = 0;
 	total = 0;
 	while (dirs[i])
@@ -43,7 +41,7 @@ void	print_filename_error(char *path)
 {
 	struct stat	*buf;
 
-	buf = (struct stat *)malloc(sizeof(struct stat));
+	buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 	stat(path, buf);
 	ft_putstr("\n\n");
 	ft_putstr(path);

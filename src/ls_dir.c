@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:01:35 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 13:30:39 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:35:40 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	recursion(t_flags flags, t_stats **dirs, char *path, int depth)
 
 	if (flags.R)
 	{
-		buf = (struct stat *)malloc(sizeof(struct stat));
+		buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 		i = 0;
 		while (dirs[i])
 		{
@@ -75,16 +75,16 @@ static t_stats	**add_dir(t_stats **names, char *n_name, char n_type, char n_r)
 	i = 0;
 	while (names[i])
 		i++;
-	new_names = (t_stats **)malloc(sizeof(t_stats *) * (i + 2));
+	new_names = (t_stats **)ft_memalloc(sizeof(t_stats *) * (i + 2));
 	i = -1;
 	while (names[++i])
 	{
-		new_names[i] = (t_stats *)malloc(sizeof(t_stats));
+		new_names[i] = (t_stats *)ft_memalloc(sizeof(t_stats));
 		new_names[i]->d_name = ft_strdup(names[i]->d_name);
 		new_names[i]->d_type = names[i]->d_type;
 		new_names[i]->no_recursion = names[i]->no_recursion;
 	}
-	new_names[i] = (t_stats *)malloc(sizeof(t_stats));
+	new_names[i] = (t_stats *)ft_memalloc(sizeof(t_stats));
 	new_names[i]->d_name = ft_strdup(n_name);
 	new_names[i]->d_type = n_type;
 	new_names[i]->no_recursion = n_r;

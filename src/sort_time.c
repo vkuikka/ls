@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:30:14 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 20:36:39 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:36:58 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,8 @@ void	sort_files_time(char *path, t_stats **files, int reverse)
 	long		mod_time[2];
 	int			i[2];
 
-	buf[0] = (struct stat *)malloc(sizeof(struct stat));
-	buf[1] = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf[0] || !buf[1])
-		return ;
+	buf[0] = (struct stat *)ft_memalloc(sizeof(struct stat));
+	buf[1] = (struct stat *)ft_memalloc(sizeof(struct stat));
 	i[0] = -1;
 	while (files[++i[0]])
 	{
@@ -77,10 +75,8 @@ void	sort_args_time(int argc, char **argv, int reverse)
 	int			i;
 	int			j;
 
-	buf[0] = (struct stat *)malloc(sizeof(struct stat));
-	buf[1] = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf[0] || !buf[1])
-		return ;
+	buf[0] = (struct stat *)ft_memalloc(sizeof(struct stat));
+	buf[1] = (struct stat *)ft_memalloc(sizeof(struct stat));
 	i = -1;
 	while (++i < argc)
 	{

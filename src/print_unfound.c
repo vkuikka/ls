@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 21:24:11 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/16 02:06:51 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:36:30 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,7 @@ static int	unfound_init(int argc, char **argv,
 	sort_args_alphabetical(argc - f, &argv[f], flags.r);
 	if (flags.t)
 		sort_args_time(argc - f, &argv[f], flags.r);
-	*buf = (struct stat *)malloc(sizeof(struct stat));
-	if (!*buf)
-		return (0);
+	*buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 	return (1);
 }
 

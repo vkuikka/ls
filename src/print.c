@@ -6,7 +6,7 @@
 /*   By: vkuikka <vkuikka@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 18:28:06 by vkuikka           #+#    #+#             */
-/*   Updated: 2022/02/15 23:58:29 by vkuikka          ###   ########.fr       */
+/*   Updated: 2022/02/16 13:36:40 by vkuikka          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,7 @@ void	long_format(char *path, char *name, int first)
 	char		buff[PATH_MAX];
 
 	full_path = ft_strjoin(path, name);
-	buf = (struct stat *)malloc(sizeof(struct stat));
-	if (!buf)
-	{
-		free(full_path);
-		return ;
-	}
+	buf = (struct stat *)ft_memalloc(sizeof(struct stat));
 	if (first)
 		ft_putstr("\n");
 	lstat(full_path, buf);
